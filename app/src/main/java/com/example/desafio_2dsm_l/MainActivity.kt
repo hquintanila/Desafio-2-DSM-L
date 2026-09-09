@@ -1,5 +1,6 @@
 package com.example.desafio_2dsm_l
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +27,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         adapter = ViajeAdapter { viaje ->
-            Toast.makeText(this, "Seleccionado: ${viaje.titulo}", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, DetailActivity::class.java).apply {
+                putExtra("EXTRA_TITULO", viaje.titulo)
+                putExtra("EXTRA_DESCRIPCION", viaje.descripcion)
+                putExtra("EXTRA_UBICACION", viaje.ubicacion)
+                putExtra("EXTRA_DURACION", viaje.duracion)
+                putExtra("EXTRA_PRECIO", viaje.precio)
+                putExtra("EXTRA_IMAGEN_URL", viaje.imagenUrl)
+            }
+            startActivity(intent)
         }
         binding.rvViajes.layoutManager = LinearLayoutManager(this)
         binding.rvViajes.adapter = adapter
