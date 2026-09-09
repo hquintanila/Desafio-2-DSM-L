@@ -5,7 +5,7 @@ data class Viaje(
     var titulo: String = "",
     var descripcion: String = "",
     var precio: Double = 0.0,
-    var duracion: String = "",      // Ejemplo: "3 Días / 4 Noches"
+    var duracion: String = "",      // Ejemplo: "5 Días / 4 Noches"
     var ubicacion: String = "",     // Ejemplo: "Cancún, México"
     var imagenUrl: String = "",     // URL guardada en Firebase Storage o servidor web
     var disponible: Boolean = true
