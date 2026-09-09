@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "822194260190",
+    "project_id": "agenciaviajesapp-eef0b",
+    "storage_bucket": "agenciaviajesapp-eef0b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822194260190:android:4e4abd838784e8f7115a4f",
+        "android_client_info": {
+          "package_name": "com.example.desafio_2dsm_l"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp46N9fsr8AJeWXx8xm60DceoZejz7Dak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
