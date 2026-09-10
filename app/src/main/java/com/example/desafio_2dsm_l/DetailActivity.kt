@@ -26,6 +26,7 @@ class DetailActivity : AppCompatActivity() {
         val duracion = intent.getStringExtra("EXTRA_DURACION") ?: ""
         val precio = intent.getDoubleExtra("EXTRA_PRECIO", 0.0)
         val imagenUrl = intent.getStringExtra("EXTRA_IMAGEN_URL") ?: ""
+        val imagenResId = intent.getIntExtra("EXTRA_IMAGEN_RES_ID", 0)
 
         // Asignar los valores a la interfaz
         binding.tvDetailTitulo.text = titulo
@@ -34,11 +35,18 @@ class DetailActivity : AppCompatActivity() {
         binding.tvDetailDuracion.text = duracion
         binding.tvDetailPrecio.text = "$$precio"
 
-        Glide.with(this)
-            .load(imagenUrl)
-            .placeholder(android.R.drawable.ic_menu_gallery)
-            .error(android.R.drawable.ic_menu_report_image)
-            .into(binding.ivDetailImagen)
+        // Carga de imagen con prioridad: Local -> URL -> Imagen de respaldo
+        if (imagenResId != 0) {
+            binding.ivDetailImagen.setImageResource(imagenResId)
+        } else if (imagenUrl.isNotEmpty()) {
+            Glide.with(this)
+                .load(imagenUrl)
+                .placeholder(R.drawable.cancun1)
+                .error(R.drawable.cancun1)
+                .into(binding.ivDetailImagen)
+        } else {
+            binding.ivDetailImagen.setImageResource(R.drawable.cancun1)
+        }
 
         binding.btnReservar.setOnClickListener {
             Toast.makeText(this, "¡Reserva Realizada Para $titulo!", Toast.LENGTH_LONG).show()

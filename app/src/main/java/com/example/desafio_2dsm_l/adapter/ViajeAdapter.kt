@@ -9,8 +9,12 @@ import com.example.desafio_2dsm_l.databinding.ItemViajeBinding
 import com.example.desafio_2dsm_l.model.Viaje
 
 class ViajeAdapter(
-    private var listaViajes: List<Viaje>
+    private var listaViajes: List<Viaje> = emptyList(),
+    private val onItemClick: (Viaje) -> Unit
 ) : RecyclerView.Adapter<ViajeAdapter.ViajeViewHolder>() {
+
+    // Constructor secundario para inicializar como: ViajeAdapter { viaje -> ... }
+    constructor(onItemClick: (Viaje) -> Unit) : this(emptyList(), onItemClick)
 
     inner class ViajeViewHolder(val binding: ItemViajeBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(viaje: Viaje) {
@@ -19,21 +23,20 @@ class ViajeAdapter(
             binding.tvDuracion.text = viaje.duracion
             binding.tvPrecio.text = "$${viaje.precio}"
 
-            // 1. Cargar drawable local si está asignado
             if (viaje.imagenResId != 0) {
                 binding.ivImagenViaje.setImageResource(viaje.imagenResId)
-            }
-            // 2. Cargar URL de red con Glide
-            else if (viaje.imagenUrl.isNotEmpty()) {
+            } else if (viaje.imagenUrl.isNotEmpty()) {
                 Glide.with(itemView.context)
                     .load(viaje.imagenUrl)
                     .placeholder(R.drawable.cancun1)
                     .error(R.drawable.cancun1)
                     .into(binding.ivImagenViaje)
-            }
-            // 3. Fallback por defecto si no hay ninguna imagen
-            else {
+            } else {
                 binding.ivImagenViaje.setImageResource(R.drawable.cancun1)
+            }
+
+            binding.cardViaje.setOnClickListener {
+                onItemClick(viaje)
             }
         }
     }
@@ -53,7 +56,7 @@ class ViajeAdapter(
 
     override fun getItemCount(): Int = listaViajes.size
 
-    fun actualizarLista(nuevaLista: List<Viaje>) {
+    fun updateLista(nuevaLista: List<Viaje>) {
         this.listaViajes = nuevaLista
         notifyDataSetChanged()
     }
