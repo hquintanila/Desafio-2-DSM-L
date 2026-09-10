@@ -45,6 +45,12 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- CartActivity (Pantalla del carrito de compras) -->
+        <activity
+            android:name=".CartActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
     </application>
 
 </manifest>

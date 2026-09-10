@@ -2,10 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- Ícono para Ver el Carrito de Compras -->
     <item
-        android:id="@+id/action_logout"
-        android:title="Cerrar sesión"
-        android:icon="@android:drawable/ic_lock_power_off"
-        app:showAsAction="never" />
+        android:id="@+id/action_cart"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Carrito"
+        app:showAsAction="always" />
 
+    <!-- Submenú de Perfil de Usuario -->
+    <item
+        android:id="@+id/action_profile"
+        android:title="Mi Perfil"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/action_profile_email"
+                android:enabled="false"
+                android:title="Correo: ***" />
+            <item
+                android:id="@+id/action_logout"
+                android:title="Cerrar Sesión" />
+        </menu>
+    </item>
 </menu>

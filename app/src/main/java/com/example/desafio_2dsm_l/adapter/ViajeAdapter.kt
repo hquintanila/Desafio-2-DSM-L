@@ -1,6 +1,7 @@
 package com.example.desafio_2dsm_l.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -10,11 +11,15 @@ import com.example.desafio_2dsm_l.model.Viaje
 
 class ViajeAdapter(
     private var listaViajes: List<Viaje> = emptyList(),
-    private val onItemClick: (Viaje) -> Unit
+    private val onItemClick: (Viaje) -> Unit,
+    private val onAddCartClick: ((Viaje) -> Unit)? = null,
+    private val showAddButton: Boolean = true
 ) : RecyclerView.Adapter<ViajeAdapter.ViajeViewHolder>() {
 
-    // Constructor secundario para inicializar como: ViajeAdapter { viaje -> ... }
-    constructor(onItemClick: (Viaje) -> Unit) : this(emptyList(), onItemClick)
+    constructor(
+        onItemClick: (Viaje) -> Unit,
+        onAddCartClick: (Viaje) -> Unit
+    ) : this(emptyList(), onItemClick, onAddCartClick, true)
 
     inner class ViajeViewHolder(val binding: ItemViajeBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(viaje: Viaje) {
@@ -23,18 +28,47 @@ class ViajeAdapter(
             binding.tvDuracion.text = viaje.duracion
             binding.tvPrecio.text = "$${viaje.precio}"
 
-            if (viaje.imagenResId != 0) {
-                binding.ivImagenViaje.setImageResource(viaje.imagenResId)
-            } else if (viaje.imagenUrl.isNotEmpty()) {
-                Glide.with(itemView.context)
-                    .load(viaje.imagenUrl)
-                    .placeholder(R.drawable.cancun1)
-                    .error(R.drawable.cancun1)
-                    .into(binding.ivImagenViaje)
-            } else {
-                binding.ivImagenViaje.setImageResource(R.drawable.cancun1)
+            // Obtener el identificador dinámico de drawable (ej: "alaska", "cartagena", "janeiro")
+            val context = itemView.context
+            val resIdByName = if (!viaje.imagenUrl.isNullOrEmpty()) {
+                context.resources.getIdentifier(viaje.imagenUrl.trim(), "drawable", context.packageName)
+            } else 0
+
+            // Carga de imagen con prioridades: Resource ID explícito -> Nombre Drawable -> URL Web -> Fallback
+            when {
+                viaje.imagenResId != 0 -> {
+                    binding.ivImagenViaje.setImageResource(viaje.imagenResId)
+                }
+                resIdByName != 0 -> {
+                    Glide.with(context)
+                        .load(resIdByName)
+                        .placeholder(R.drawable.cancun1)
+                        .error(R.drawable.cancun1)
+                        .into(binding.ivImagenViaje)
+                }
+                !viaje.imagenUrl.isNullOrEmpty() -> {
+                    Glide.with(context)
+                        .load(viaje.imagenUrl)
+                        .placeholder(R.drawable.cancun1)
+                        .error(R.drawable.cancun1)
+                        .into(binding.ivImagenViaje)
+                }
+                else -> {
+                    binding.ivImagenViaje.setImageResource(R.drawable.cancun1)
+                }
             }
 
+            // Visibilidad y comportamiento del botón Agregar al Carrito
+            if (showAddButton && onAddCartClick != null) {
+                binding.btnAgregar.visibility = View.VISIBLE
+                binding.btnAgregar.setOnClickListener {
+                    onAddCartClick.invoke(viaje)
+                }
+            } else {
+                binding.btnAgregar.visibility = View.GONE
+            }
+
+            // Clic en la tarjeta para abrir vista de detalle
             binding.cardViaje.setOnClickListener {
                 onItemClick(viaje)
             }

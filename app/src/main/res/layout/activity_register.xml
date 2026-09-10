@@ -59,8 +59,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:maxLines="1"
-                android:textColor="#111827"
-                android:textColorHint="#6B7280" />
+                android:textColor="#0288D1"
+                android:textColorHint="#550288D1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Correo Electrónico -->
@@ -86,8 +86,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:textColor="#111827"
-                android:textColorHint="#6B7280" />
+                android:textColor="#0288D1"
+                android:textColorHint="#550288D1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Contraseña -->
@@ -115,8 +115,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:textColor="#111827"
-                android:textColorHint="#6B7280" />
+                android:textColor="#0288D1"
+                android:textColorHint="#550288D1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Confirmar Contraseña -->
@@ -144,8 +144,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:textColor="#111827"
-                android:textColorHint="#6B7280" />
+                android:textColor="#0288D1"
+                android:textColorHint="#550288D1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Botón Registrarse -->

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.desafio_2dsm_l.adapter.ViajeAdapter
 import com.example.desafio_2dsm_l.databinding.ActivityMainBinding
+import com.example.desafio_2dsm_l.model.CartManager
 import com.example.desafio_2dsm_l.model.Viaje
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Configurar la Toolbar como barra de acciones principal
         setSupportActionBar(binding.toolbarMain)
 
         setupRecyclerView()
@@ -35,11 +35,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+
+        // Muestra la información del usuario encriptada en los elementos del menú
+        val user = auth.currentUser
+        val email = user?.email ?: "usuario@ejemplo.com"
+        val emailEncriptado = encriptarEmail(email)
+
+        menu?.findItem(R.id.action_profile_email)?.title = "Correo: $emailEncriptado"
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_cart -> {
+                val intent = Intent(this, CartActivity::class.java)
+                startActivity(intent)
+                true
+            }
             R.id.action_logout -> {
                 cerrarSesion()
                 true
@@ -48,8 +60,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun encriptarEmail(email: String): String {
+        val partes = email.split("@")
+        if (partes.size < 2) return email
+        val usuario = partes[0]
+        val dominio = partes[1]
+
+        val usuarioEncriptado = if (usuario.length > 2) {
+            usuario.take(2) + "*".repeat(usuario.length - 2)
+        } else {
+            "**"
+        }
+        return "$usuarioEncriptado@$dominio"
+    }
+
     private fun cerrarSesion() {
         auth.signOut()
+        CartManager.limpiarCarrito()
         Toast.makeText(this, "Sesión Cerrada Correctamente", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
@@ -57,18 +84,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = ViajeAdapter { viaje ->
-            val intent = Intent(this, DetailActivity::class.java).apply {
-                putExtra("EXTRA_TITULO", viaje.titulo)
-                putExtra("EXTRA_DESCRIPCION", viaje.descripcion)
-                putExtra("EXTRA_UBICACION", viaje.ubicacion)
-                putExtra("EXTRA_DURACION", viaje.duracion)
-                putExtra("EXTRA_PRECIO", viaje.precio)
-                putExtra("EXTRA_IMAGEN_URL", viaje.imagenUrl)
-                putExtra("EXTRA_IMAGEN_RES_ID", viaje.imagenResId)
+        adapter = ViajeAdapter(
+            onItemClick = { viaje ->
+                val intent = Intent(this, DetailActivity::class.java).apply {
+                    putExtra("EXTRA_TITULO", viaje.titulo)
+                    putExtra("EXTRA_DESCRIPCION", viaje.descripcion)
+                    putExtra("EXTRA_UBICACION", viaje.ubicacion)
+                    putExtra("EXTRA_DURACION", viaje.duracion)
+                    putExtra("EXTRA_PRECIO", viaje.precio)
+                    putExtra("EXTRA_IMAGEN_URL", viaje.imagenUrl)
+                    putExtra("EXTRA_IMAGEN_RES_ID", viaje.imagenResId)
+                }
+                startActivity(intent)
+            },
+            onAddCartClick = { viaje ->
+                CartManager.agregarAlCarrito(viaje)
+                Toast.makeText(this, "${viaje.titulo} agregado al Carrito", Toast.LENGTH_SHORT).show()
             }
-            startActivity(intent)
-        }
+        )
         binding.rvViajes.layoutManager = LinearLayoutManager(this)
         binding.rvViajes.adapter = adapter
     }
@@ -78,7 +111,7 @@ class MainActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 if (result.isEmpty) {
-                    cargarDatosLocales("Mostrando Catálogo Local de Viajes.")
+                    cargarDatosLocales("Mostrando Catálogo Completo de Viajes.")
                     return@addOnSuccessListener
                 }
 
@@ -95,20 +128,18 @@ class MainActivity : AppCompatActivity() {
 
                         listaViajes.add(viaje)
                     } catch (e: Exception) {
-                        Log.e("MainActivity", "Error convirtiendo documento: ${e.message}")
+                        Log.e("MainActivity", "Error procesando item: ${e.message}")
                     }
                 }
 
-                // Si ningún documento de Firestore fue compatible, carga los locales de respaldo
                 if (listaViajes.isEmpty()) {
-                    cargarDatosLocales("Incompatibilidad de datos. Cargando catálogo local.")
+                    cargarDatosLocales("Mostrando Catálogo Local.")
                 } else {
                     adapter.updateLista(listaViajes)
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.e("MainActivity", "Error en Firestore: ${exception.message}")
-                cargarDatosLocales("Aviso: Conectando en Modo Offline. Mostrando Catálogo Local.")
+            .addOnFailureListener {
+                cargarDatosLocales("Modo Offline. Cargando Catálogo Local.")
             }
     }
 
@@ -123,43 +154,21 @@ class MainActivity : AppCompatActivity() {
         return when {
             tituloLower.contains("cancun") || tituloLower.contains("cancún") -> R.drawable.cancun1
             tituloLower.contains("cenote") -> R.drawable.cenotes3
-            tituloLower.contains("arqueologia") || tituloLower.contains("arqueológica") || tituloLower.contains("chichen") -> R.drawable.arqueologia
-            else -> {
-                val imagenes = listOf(R.drawable.cancun1, R.drawable.cenotes3, R.drawable.arqueologia)
-                imagenes[indice % imagenes.size]
-            }
+            tituloLower.contains("colombia") || tituloLower.contains("caribe") -> R.drawable.cancun1
+            tituloLower.contains("brasil") || tituloLower.contains("rio") -> R.drawable.cenotes3
+            tituloLower.contains("alaska") || tituloLower.contains("glaciar") -> R.drawable.arqueologia
+            else -> R.drawable.arqueologia
         }
     }
 
     private fun obtenerListaLocales(): List<Viaje> {
         return listOf(
-            Viaje(
-                id = "local_1",
-                titulo = "Cancún Todo Incluido",
-                descripcion = "Disfruta de Playas Caribeñas de Arena Blanca y Aguas Turquesas.",
-                precio = 499.00,
-                duracion = "5 Días / 4 Noches",
-                ubicacion = "Quintana Roo, México",
-                imagenResId = R.drawable.cancun1
-            ),
-            Viaje(
-                id = "local_2",
-                titulo = "Exploración de Cenotes",
-                descripcion = "Sumérgete en los Mágicos Pozos Naturales Sagrados de la Península.",
-                precio = 299.00,
-                duracion = "3 Días / 2 Noches",
-                ubicacion = "Yucatán, México",
-                imagenResId = R.drawable.cenotes3
-            ),
-            Viaje(
-                id = "local_3",
-                titulo = "Ruta Arqueológica",
-                descripcion = "Descubre las Majestuosas Ruinas Mayas y su Historia Ancestral.",
-                precio = 399.00,
-                duracion = "4 Días / 3 Noches",
-                ubicacion = "Chichén Itzá, México",
-                imagenResId = R.drawable.arqueologia
-            )
+            Viaje("local_1", "Cancún Todo Incluido", "Disfruta de Playas Caribeñas de Arena Blanca y Aguas Turquesas.", 499.00, "5 Días / 4 Noches", "Quintana Roo, México", imagenResId = R.drawable.cancun1),
+            Viaje("local_2", "Exploración de Cenotes", "Sumérgete en los Mágicos Pozos Naturales Sagrados de la Península.", 299.00, "3 Días / 2 Noches", "Yucatán, México", imagenResId = R.drawable.cenotes3),
+            Viaje("local_3", "Ruta Arqueológica", "Descubre las Majestuosas Ruinas Mayas y su Historia Ancestral.", 399.00, "4 Días / 3 Noches", "Chichén Itzá, México", imagenResId = R.drawable.arqueologia),
+            Viaje("local_4", "Maravillas de Colombia", "Conoce la Hermosa Cartagena de Indias y sus playas históricas.", 550.00, "6 Días / 5 Noches", "Cartagena, Colombia", imagenResId = R.drawable.cancun1),
+            Viaje("local_5", "Río de Janeiro Mágico", "Vive la Emoción del Cristo Redentor y las Playas de Copacabana.", 680.00, "7 Días / 6 Noches", "Río de Janeiro, Brasil", imagenResId = R.drawable.cenotes3),
+            Viaje("local_6", "Aventura Glaciar en Alaska", "Explora Impresionantes Paisajes Helados, Auroras y Fiordos.", 890.00, "5 Días / 4 Noches", "Anchorage, Alaska", imagenResId = R.drawable.arqueologia)
         )
     }
 }
