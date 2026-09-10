@@ -15,11 +15,11 @@
         <!-- Banner / Encabezado -->
         <ImageView
             android:id="@+id/ivLogo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="40dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="32dp"
             android:contentDescription="Logo Agencia de Viajes"
-            android:src="@android:drawable/ic_menu_compass"
+            app:srcCompat="@drawable/ic_map"
             app:tint="#0288D1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
