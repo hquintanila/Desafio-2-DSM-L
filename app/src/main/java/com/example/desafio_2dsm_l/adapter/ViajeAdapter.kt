@@ -4,16 +4,39 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.desafio_2dsm_l.R
 import com.example.desafio_2dsm_l.databinding.ItemViajeBinding
 import com.example.desafio_2dsm_l.model.Viaje
 
 class ViajeAdapter(
-    private var listaViajes: List<Viaje> = emptyList(),
-    private val onItemClick: (Viaje) -> Unit
+    private var listaViajes: List<Viaje>
 ) : RecyclerView.Adapter<ViajeAdapter.ViajeViewHolder>() {
 
-    inner class ViajeViewHolder(val binding: ItemViajeBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    inner class ViajeViewHolder(val binding: ItemViajeBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(viaje: Viaje) {
+            binding.tvTitulo.text = viaje.titulo
+            binding.tvUbicacion.text = viaje.ubicacion
+            binding.tvDuracion.text = viaje.duracion
+            binding.tvPrecio.text = "$${viaje.precio}"
+
+            // 1. Cargar drawable local si está asignado
+            if (viaje.imagenResId != 0) {
+                binding.ivImagenViaje.setImageResource(viaje.imagenResId)
+            }
+            // 2. Cargar URL de red con Glide
+            else if (viaje.imagenUrl.isNotEmpty()) {
+                Glide.with(itemView.context)
+                    .load(viaje.imagenUrl)
+                    .placeholder(R.drawable.cancun1)
+                    .error(R.drawable.cancun1)
+                    .into(binding.ivImagenViaje)
+            }
+            // 3. Fallback por defecto si no hay ninguna imagen
+            else {
+                binding.ivImagenViaje.setImageResource(R.drawable.cancun1)
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViajeViewHolder {
         val binding = ItemViajeBinding.inflate(
@@ -25,29 +48,13 @@ class ViajeAdapter(
     }
 
     override fun onBindViewHolder(holder: ViajeViewHolder, position: Int) {
-        val viaje = listaViajes[position]
-        with(holder.binding) {
-            tvTitulo.text = viaje.titulo
-            tvUbicacion.text = viaje.ubicacion
-            tvDuracion.text = viaje.duracion
-            tvPrecio.text = "$${viaje.precio}"
-
-            // Carga de imagen remota con Glide
-            Glide.with(root.context)
-                .load(viaje.imagenUrl)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_menu_report_image)
-                .into(ivImagenViaje)
-
-            root.setOnClickListener { onItemClick(viaje) }
-        }
+        holder.bind(listaViajes[position])
     }
 
     override fun getItemCount(): Int = listaViajes.size
 
-    // Función para actualizar la lista cuando carguen los datos desde Firebase
-    fun updateLista(nuevaLista: List<Viaje>) {
-        listaViajes = nuevaLista
+    fun actualizarLista(nuevaLista: List<Viaje>) {
+        this.listaViajes = nuevaLista
         notifyDataSetChanged()
     }
 }
