@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
 
-        // Muestra la información del usuario encriptada en los elementos del menú
         val user = auth.currentUser
         val email = user?.email ?: "usuario@ejemplo.com"
         val emailEncriptado = encriptarEmail(email)
@@ -99,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             },
             onAddCartClick = { viaje ->
                 CartManager.agregarAlCarrito(viaje)
-                Toast.makeText(this, "${viaje.titulo} agregado al Carrito", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "${viaje.titulo} Agregado al Carrito", Toast.LENGTH_SHORT).show()
             }
         )
         binding.rvViajes.layoutManager = LinearLayoutManager(this)
@@ -111,64 +110,26 @@ class MainActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 if (result.isEmpty) {
-                    cargarDatosLocales("Mostrando Catálogo Completo de Viajes.")
+                    Toast.makeText(this, "No Se Encontraron Viajes Registrados.", Toast.LENGTH_SHORT).show()
                     return@addOnSuccessListener
                 }
 
                 val listaViajes = mutableListOf<Viaje>()
-                for ((index, document) in result.withIndex()) {
+                for (document in result) {
                     try {
                         val viaje = document.toObject(Viaje::class.java)
                         viaje.id = document.id
-
-                        val tituloSeguro = viaje.titulo ?: ""
-                        if (viaje.imagenUrl.isNullOrBlank() && viaje.imagenResId == 0) {
-                            viaje.imagenResId = obtenerImagenLocalPorDefecto(tituloSeguro, index)
-                        }
-
                         listaViajes.add(viaje)
                     } catch (e: Exception) {
-                        Log.e("MainActivity", "Error procesando item: ${e.message}")
+                        Log.e("MainActivity", "Error Procesando Item: ${e.message}")
                     }
                 }
 
-                if (listaViajes.isEmpty()) {
-                    cargarDatosLocales("Mostrando Catálogo Local.")
-                } else {
-                    adapter.updateLista(listaViajes)
-                }
+                adapter.updateLista(listaViajes)
             }
-            .addOnFailureListener {
-                cargarDatosLocales("Modo Offline. Cargando Catálogo Local.")
+            .addOnFailureListener { e ->
+                Log.e("MainActivity", "Error al Conectar con Firestore: ${e.message}")
+                Toast.makeText(this, "Error al Cargar Catálogo desde el Servidor", Toast.LENGTH_SHORT).show()
             }
-    }
-
-    private fun cargarDatosLocales(mensajeToast: String) {
-        Toast.makeText(this, mensajeToast, Toast.LENGTH_SHORT).show()
-        val listaLocales = obtenerListaLocales()
-        adapter.updateLista(listaLocales)
-    }
-
-    private fun obtenerImagenLocalPorDefecto(titulo: String, indice: Int): Int {
-        val tituloLower = titulo.lowercase()
-        return when {
-            tituloLower.contains("cancun") || tituloLower.contains("cancún") -> R.drawable.cancun1
-            tituloLower.contains("cenote") -> R.drawable.cenotes3
-            tituloLower.contains("colombia") || tituloLower.contains("caribe") -> R.drawable.cancun1
-            tituloLower.contains("brasil") || tituloLower.contains("rio") -> R.drawable.cenotes3
-            tituloLower.contains("alaska") || tituloLower.contains("glaciar") -> R.drawable.arqueologia
-            else -> R.drawable.arqueologia
-        }
-    }
-
-    private fun obtenerListaLocales(): List<Viaje> {
-        return listOf(
-            Viaje("local_1", "Cancún Todo Incluido", "Disfruta de Playas Caribeñas de Arena Blanca y Aguas Turquesas.", 499.00, "5 Días / 4 Noches", "Quintana Roo, México", imagenResId = R.drawable.cancun1),
-            Viaje("local_2", "Exploración de Cenotes", "Sumérgete en los Mágicos Pozos Naturales Sagrados de la Península.", 299.00, "3 Días / 2 Noches", "Yucatán, México", imagenResId = R.drawable.cenotes3),
-            Viaje("local_3", "Ruta Arqueológica", "Descubre las Majestuosas Ruinas Mayas y su Historia Ancestral.", 399.00, "4 Días / 3 Noches", "Chichén Itzá, México", imagenResId = R.drawable.arqueologia),
-            Viaje("local_4", "Maravillas de Colombia", "Conoce la Hermosa Cartagena de Indias y sus playas históricas.", 550.00, "6 Días / 5 Noches", "Cartagena, Colombia", imagenResId = R.drawable.cancun1),
-            Viaje("local_5", "Río de Janeiro Mágico", "Vive la Emoción del Cristo Redentor y las Playas de Copacabana.", 680.00, "7 Días / 6 Noches", "Río de Janeiro, Brasil", imagenResId = R.drawable.cenotes3),
-            Viaje("local_6", "Aventura Glaciar en Alaska", "Explora Impresionantes Paisajes Helados, Auroras y Fiordos.", 890.00, "5 Días / 4 Noches", "Anchorage, Alaska", imagenResId = R.drawable.arqueologia)
-        )
     }
 }
