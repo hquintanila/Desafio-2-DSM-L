@@ -2,6 +2,7 @@ package com.example.desafio_2dsm_l
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -11,7 +12,6 @@ import com.example.desafio_2dsm_l.adapter.ViajeAdapter
 import com.example.desafio_2dsm_l.databinding.ActivityMainBinding
 import com.example.desafio_2dsm_l.model.Viaje
 import com.google.firebase.auth.FirebaseAuth
-import com.example.desafio_2dsm_l.R
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
@@ -78,27 +78,36 @@ class MainActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 if (result.isEmpty) {
-                    // Validación: Si Firestore no tiene registros, cargamos los 3 destinos locales
                     cargarDatosLocales("Mostrando Catálogo Local de Viajes.")
                     return@addOnSuccessListener
                 }
 
                 val listaViajes = mutableListOf<Viaje>()
                 for ((index, document) in result.withIndex()) {
-                    val viaje = document.toObject(Viaje::class.java)
-                    viaje.id = document.id
+                    try {
+                        val viaje = document.toObject(Viaje::class.java)
+                        viaje.id = document.id
 
-                    // Validación: Si la URL de la imagen en Firestore es vacía o nula, asignamos la local por título o posición
-                    if (viaje.imagenUrl.isNullOrBlank() && viaje.imagenResId == 0) {
-                        viaje.imagenResId = obtenerImagenLocalPorDefecto(viaje.titulo, index)
+                        val tituloSeguro = viaje.titulo ?: ""
+                        if (viaje.imagenUrl.isNullOrBlank() && viaje.imagenResId == 0) {
+                            viaje.imagenResId = obtenerImagenLocalPorDefecto(tituloSeguro, index)
+                        }
+
+                        listaViajes.add(viaje)
+                    } catch (e: Exception) {
+                        Log.e("MainActivity", "Error convirtiendo documento: ${e.message}")
                     }
-
-                    listaViajes.add(viaje)
                 }
-                adapter.updateLista(listaViajes)
+
+                // Si ningún documento de Firestore fue compatible, carga los locales de respaldo
+                if (listaViajes.isEmpty()) {
+                    cargarDatosLocales("Incompatibilidad de datos. Cargando catálogo local.")
+                } else {
+                    adapter.updateLista(listaViajes)
+                }
             }
             .addOnFailureListener { exception ->
-                // Validación: En caso de error de red/Firestore, se activa la lista de respaldo
+                Log.e("MainActivity", "Error en Firestore: ${exception.message}")
                 cargarDatosLocales("Aviso: Conectando en Modo Offline. Mostrando Catálogo Local.")
             }
     }

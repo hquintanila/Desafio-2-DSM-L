@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Regístrate Para Empezar a Reservar Tus Viajes"
-            android:textColor="#666666"
+            android:textColor="#4B5563"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,6 +44,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:hint="Nombre Completo"
+            app:boxStrokeColor="#0288D1"
+            app:hintTextColor="#0288D1"
+            app:startIconTint="#0288D1"
             app:errorEnabled="true"
             app:startIconDrawable="@android:drawable/ic_menu_myplaces"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +58,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="#111827"
+                android:textColorHint="#6B7280" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Correo Electrónico -->
@@ -66,6 +71,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="Correo Electrónico"
+            app:boxStrokeColor="#0288D1"
+            app:hintTextColor="#0288D1"
+            app:startIconTint="#0288D1"
             app:errorEnabled="true"
             app:startIconDrawable="@android:drawable/ic_dialog_email"
             app:layout_constraintEnd_toEndOf="parent"
@@ -77,7 +85,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="#111827"
+                android:textColorHint="#6B7280" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Contraseña -->
@@ -88,6 +98,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="Contraseña"
+            app:boxStrokeColor="#0288D1"
+            app:hintTextColor="#0288D1"
+            app:startIconTint="#0288D1"
+            app:passwordToggleTint="#0288D1"
             app:errorEnabled="true"
             app:passwordToggleEnabled="true"
             app:startIconDrawable="@android:drawable/ic_lock_lock"
@@ -100,7 +114,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="#111827"
+                android:textColorHint="#6B7280" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Confirmar Contraseña -->
@@ -111,6 +127,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="Confirmar Contraseña"
+            app:boxStrokeColor="#0288D1"
+            app:hintTextColor="#0288D1"
+            app:startIconTint="#0288D1"
+            app:passwordToggleTint="#0288D1"
             app:errorEnabled="true"
             app:passwordToggleEnabled="true"
             app:startIconDrawable="@android:drawable/ic_lock_lock"
@@ -123,7 +143,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="#111827"
+                android:textColorHint="#6B7280" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Botón Registrarse -->
@@ -134,7 +156,9 @@
             android:layout_marginTop="24dp"
             android:text="Registrarse"
             android:textAllCaps="false"
+            android:textColor="#FFFFFF"
             android:textSize="16sp"
+            android:textStyle="bold"
             app:backgroundTint="#0288D1"
             app:cornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -148,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="¿Ya Tienes Cuenta? Inicia Sesión Aquí"
-            android:textColor="#FF8F00"
+            android:textColor="#E65100"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

@@ -1,13 +1,10 @@
 package com.example.desafio_2dsm_l
 
-import androidx.activity.enableEdgeToEdge
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
+import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.desafio_2dsm_l.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -23,14 +20,17 @@ class RegisterActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
+        // Evento click del botón Registrarse
         binding.btnRegister.setOnClickListener {
             if (validateInputs()) {
                 performRegistration()
             }
         }
 
+        // Evento click para ir al Login
         binding.tvLoginLink.setOnClickListener {
-            finish() // Regresa a LoginActivity
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -92,17 +92,34 @@ class RegisterActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 binding.btnRegister.isEnabled = true
                 if (task.isSuccessful) {
-                    Toast.makeText(this, "Registro Exitoso", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "¡Registro Exitoso!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finishAffinity() // Cierra las pantallas de autenticación
                 } else {
-                    Toast.makeText(
-                        this,
-                        "Error Al Registrar: ${task.exception?.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    val errorMessage = getErrorMessage(task.exception)
+                    Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
                 }
             }
+    }
+
+    // Método para traducir las excepciones de Registro de Firebase Auth al español
+    private fun getErrorMessage(exception: Exception?): String {
+        val msg = exception?.message ?: ""
+        return when {
+            msg.contains("already in use", ignoreCase = true) ->
+                "El Correo Electrónico Ya Está Registrado. Intenta Iniciar Sesión."
+            msg.contains("badly formatted", ignoreCase = true) ->
+                "El Correo Electrónico No Tiene Un Formato Válido."
+            msg.contains("weak password", ignoreCase = true) ->
+                "La Contraseña Es Demasiado Débil. Usa al Menos 6 Caracteres."
+            msg.contains("network", ignoreCase = true) ->
+                "Error de Red. Revisa Tu Conexión a Internet."
+            msg.contains("too many", ignoreCase = true) ||
+                    msg.contains("blocked", ignoreCase = true) ->
+                "Acceso Bloqueado Temporalmente Por Demasiados Intentos Fallidos."
+            else ->
+                "Error al Registrar la Cuenta. Verifica Tus Datos e Inténtalo de Nuevo."
+        }
     }
 }

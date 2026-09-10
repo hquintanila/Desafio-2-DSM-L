@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.desafio_2dsm_l"
-    compileSdk = 34
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.desafio_2dsm_l"

@@ -1,13 +1,10 @@
 package com.example.desafio_2dsm_l
 
-import androidx.activity.enableEdgeToEdge
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
+import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.desafio_2dsm_l.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -35,7 +32,6 @@ class LoginActivity : AppCompatActivity() {
 
         // Evento click para ir al registro
         binding.tvRegisterLink.setOnClickListener {
-            // Navegar hacia RegisterActivity (se creará a continuación)
             startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
@@ -82,17 +78,34 @@ class LoginActivity : AppCompatActivity() {
                 binding.btnLogin.isEnabled = true
                 if (task.isSuccessful) {
                     Toast.makeText(this, "¡Bienvenido a Agencia de Viajes!", Toast.LENGTH_SHORT).show()
-                    // Redirigir a la pantalla principal del catálogo
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 } else {
-                    Toast.makeText(
-                        this,
-                        "Error Al Iniciar Sesión: ${task.exception?.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    val errorMessage = getErrorMessage(task.exception)
+                    Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
                 }
             }
+    }
+
+    // Método para traducir las excepciones de Firebase Auth al español
+    private fun getErrorMessage(exception: Exception?): String {
+        val msg = exception?.message ?: ""
+        return when {
+            msg.contains("no user record", ignoreCase = true) ->
+                "El Usuario No Está Registrado. Crea una Cuenta Primero."
+            msg.contains("INVALID_LOGIN_CREDENTIALS", ignoreCase = true) ||
+                    msg.contains("password", ignoreCase = true) ->
+                "Correo o Contraseña Incorrectos."
+            msg.contains("badly formatted", ignoreCase = true) ->
+                "El Correo Electrónico No Tiene Un Formato Válido."
+            msg.contains("network", ignoreCase = true) ->
+                "Error de Red. Revisa Tu Conexión a Internet."
+            msg.contains("too many", ignoreCase = true) ||
+                    msg.contains("blocked", ignoreCase = true) ->
+                "Acceso Bloqueado Temporalmente Por Demasiados Intentos Fallidos."
+            else ->
+                "Error al Iniciar Sesión. Verifica Tus Credenciales."
+        }
     }
 }

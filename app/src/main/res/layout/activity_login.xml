@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="Inicia sesión para explorar tus destinos"
-            android:textColor="#666666"
+            android:textColor="#4B5563"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,6 +58,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:hint="Correo Electrónico"
+            app:boxStrokeColor="#0288D1"
+            app:hintTextColor="#0288D1"
+            app:startIconTint="#0288D1"
             app:errorEnabled="true"
             app:startIconDrawable="@android:drawable/ic_dialog_email"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +72,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="#111827"
+                android:textColorHint="#6B7280" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Campo Contraseña -->
@@ -80,6 +85,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:hint="Contraseña"
+            app:boxStrokeColor="#0288D1"
+            app:hintTextColor="#0288D1"
+            app:startIconTint="#0288D1"
+            app:passwordToggleTint="#0288D1"
             app:errorEnabled="true"
             app:passwordToggleEnabled="true"
             app:startIconDrawable="@android:drawable/ic_lock_lock"
@@ -92,7 +101,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="#111827"
+                android:textColorHint="#6B7280" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Botón de Iniciar Sesión -->
@@ -103,7 +114,9 @@
             android:layout_marginTop="24dp"
             android:text="Iniciar Sesión"
             android:textAllCaps="false"
+            android:textColor="#FFFFFF"
             android:textSize="16sp"
+            android:textStyle="bold"
             app:backgroundTint="#0288D1"
             app:cornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -117,7 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="¿No Tienes Una Cuenta? Regístrate Aquí"
-            android:textColor="#FF8F00"
+            android:textColor="#E65100"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

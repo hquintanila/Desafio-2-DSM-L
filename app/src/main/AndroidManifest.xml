@@ -15,9 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Desafio2DSML">
 
-        <!-- LoginActivity configurada como la pantalla principal de inicio (LAUNCHER) -->
+        <!-- RegisterActivity (Pantalla principal de inicio: Crear Cuenta) -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".RegisterActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -27,21 +27,24 @@
             </intent-filter>
         </activity>
 
+        <!-- LoginActivity (Pantalla para iniciar sesión) -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <!-- MainActivity (Catálogo de viajes / Panel principal) -->
         <activity
             android:name=".MainActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
-        <!-- RegisterActivity (Pantalla para crear cuenta) -->
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+        <!-- DetailActivity (Detalle del viaje seleccionado) -->
         <activity
             android:name=".DetailActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
     </application>
 
 </manifest>
