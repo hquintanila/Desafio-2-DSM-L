@@ -19,12 +19,12 @@ class DetailActivity : AppCompatActivity() {
             finish()
         }
 
-        // Obtener datos enviados desde el intent
+        // Obtener datos enviados desde el intent (precio como String)
         val titulo = intent.getStringExtra("EXTRA_TITULO") ?: ""
         val descripcion = intent.getStringExtra("EXTRA_DESCRIPCION") ?: ""
         val ubicacion = intent.getStringExtra("EXTRA_UBICACION") ?: ""
         val duracion = intent.getStringExtra("EXTRA_DURACION") ?: ""
-        val precio = intent.getDoubleExtra("EXTRA_PRECIO", 0.0)
+        val precio = intent.getStringExtra("EXTRA_PRECIO") ?: "0.00"
         val imagenUrl = intent.getStringExtra("EXTRA_IMAGEN_URL") ?: ""
         val imagenResId = intent.getIntExtra("EXTRA_IMAGEN_RES_ID", 0)
 
@@ -35,17 +35,30 @@ class DetailActivity : AppCompatActivity() {
         binding.tvDetailDuracion.text = duracion
         binding.tvDetailPrecio.text = "$$precio"
 
-        // Carga de imagen con prioridad: Local -> URL -> Imagen de respaldo
-        if (imagenResId != 0) {
-            binding.ivDetailImagen.setImageResource(imagenResId)
-        } else if (imagenUrl.isNotEmpty()) {
-            Glide.with(this)
-                .load(imagenUrl)
-                .placeholder(R.drawable.cancun1)
-                .error(R.drawable.cancun1)
-                .into(binding.ivDetailImagen)
+        // Resolución de la imagen: Drawable local por nombre -> Resource ID -> URL remota -> Respaldo
+        val resIdDinamico = if (imagenUrl.isNotEmpty() && !imagenUrl.startsWith("http")) {
+            resources.getIdentifier(imagenUrl, "drawable", packageName)
         } else {
-            binding.ivDetailImagen.setImageResource(R.drawable.cancun1)
+            0
+        }
+
+        when {
+            resIdDinamico != 0 -> {
+                binding.ivDetailImagen.setImageResource(resIdDinamico)
+            }
+            imagenResId != 0 -> {
+                binding.ivDetailImagen.setImageResource(imagenResId)
+            }
+            imagenUrl.startsWith("http") -> {
+                Glide.with(this)
+                    .load(imagenUrl)
+                    .placeholder(R.drawable.cancun1)
+                    .error(R.drawable.cancun1)
+                    .into(binding.ivDetailImagen)
+            }
+            else -> {
+                binding.ivDetailImagen.setImageResource(R.drawable.cancun1)
+            }
         }
 
         binding.btnReservar.setOnClickListener {
