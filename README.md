@@ -20,10 +20,10 @@ Aplicación móvil desarrollada en Android (Kotlin) para la gestión y visualiza
 * **Backend & BD:** Firebase Authentication, Cloud Firestore
 * **Gestión de Imágenes:** Glide y mapeo dinámico de recursos `drawable`
 
-## Estructura del Proyecto
 
 ## Estructura del Proyecto
 
+```text
 Desafio2DSML/
 ├── app/
 │   ├── src/
@@ -54,3 +54,4 @@ Desafio2DSML/
 │   └── build.gradle.kts                        # Dependencias del proyecto (Firebase, Glide)
 ├── build.gradle.kts                            # Configuración global de Gradle
 └── README.md                                   # Documentación oficial del repositorio
+```
