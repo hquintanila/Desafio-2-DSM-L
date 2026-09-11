@@ -22,6 +22,8 @@ Aplicación móvil desarrollada en Android (Kotlin) para la gestión y visualiza
 
 ## Estructura del Proyecto
 
+## Estructura del Proyecto
+
 Desafio2DSML/
 ├── app/
 │   ├── src/
