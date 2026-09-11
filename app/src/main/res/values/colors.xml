@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Colores base / Toolbar -->
-    <color name="primary">#1A237E</color>
-    <color name="primary_dark">#0D47A1</color>
-    <color name="colorAccent">#FFC107</color>
+    <!-- Paleta Corporativa Modo Oscuro -->
+    <color name="primary">#1A237E</color>         <!-- Azul Oscuro Corporativo -->
+    <color name="primary_dark">#000051</color>    <!-- Azul Muy Oscuro -->
+    <color name="accent">#FFC107</color>          <!-- Amarillo / Ámbar -->
+    <color name="background_dark">#121212</color> <!-- Fondo Principal Oscuro -->
+    <color name="surface_dark">#1E1E1E</color>    <!-- Fondo de Tarjetas (CardView) -->
 
-    <!-- Fondos y textos -->
-    <color name="card_background">#121212</color>
+    <!-- Textos -->
     <color name="text_white">#FFFFFF</color>
-    <color name="text_gray">#B0BEC5</color>
+    <color name="text_secondary">#B0BEC5</color>
 
-    <!-- Botones de Acción -->
-    <color name="btn_clear_cart">#C62828</color>
-    <color name="btn_remove_item">#D32F2F</color>
+    <!-- Botones de Acción Especial -->
+    <color name="red_danger">#ED4D4D</color>      <!-- Rojo para Vaciar / Eliminar -->
+    <color name="red_danger_dark">#9A0007</color>
 </resources>
