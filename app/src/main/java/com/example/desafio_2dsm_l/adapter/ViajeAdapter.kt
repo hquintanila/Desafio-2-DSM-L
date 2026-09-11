@@ -7,19 +7,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.desafio_2dsm_l.R
 import com.example.desafio_2dsm_l.databinding.ItemViajeBinding
+import com.example.desafio_2dsm_l.model.CartManager
 import com.example.desafio_2dsm_l.model.Viaje
 
 class ViajeAdapter(
     private var listaViajes: List<Viaje> = emptyList(),
     private val onItemClick: (Viaje) -> Unit,
     private val onAddCartClick: ((Viaje) -> Unit)? = null,
-    private val showAddButton: Boolean = true
+    private val showAddButton: Boolean = true,
+    private val isCartMode: Boolean = false,
+    private val onItemRemoved: (() -> Unit)? = null
 ) : RecyclerView.Adapter<ViajeAdapter.ViajeViewHolder>() {
 
     constructor(
         onItemClick: (Viaje) -> Unit,
         onAddCartClick: (Viaje) -> Unit
-    ) : this(emptyList(), onItemClick, onAddCartClick, true)
+    ) : this(
+        listaViajes = emptyList(),
+        onItemClick = onItemClick,
+        onAddCartClick = onAddCartClick,
+        showAddButton = true,
+        isCartMode = false
+    )
 
     inner class ViajeViewHolder(val binding: ItemViajeBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(viaje: Viaje) {
@@ -58,14 +67,32 @@ class ViajeAdapter(
                 }
             }
 
-            // Visibilidad y comportamiento del botón Agregar al Carrito
-            if (showAddButton && onAddCartClick != null) {
-                binding.btnAgregar.visibility = View.VISIBLE
-                binding.btnAgregar.setOnClickListener {
-                    onAddCartClick.invoke(viaje)
+            // Comportamiento según el modo (Carrito vs Catálogo)
+            if (isCartMode) {
+                // En la pantalla del carrito: ocultar botón "Agregar" y mostrar icono "Eliminar"
+                binding.btnAgregar.visibility = View.GONE
+                binding.btnEliminarItem.visibility = View.VISIBLE
+
+                binding.btnEliminarItem.setOnClickListener {
+                    val position = bindingAdapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        CartManager.eliminarPorPosicion(position)
+                        updateLista(CartManager.obtenerCarrito())
+                        onItemRemoved?.invoke() // Recalcula el total en CartActivity
+                    }
                 }
             } else {
-                binding.btnAgregar.visibility = View.GONE
+                // En la pantalla principal: ocultar icono "Eliminar"
+                binding.btnEliminarItem.visibility = View.GONE
+
+                if (showAddButton && onAddCartClick != null) {
+                    binding.btnAgregar.visibility = View.VISIBLE
+                    binding.btnAgregar.setOnClickListener {
+                        onAddCartClick.invoke(viaje)
+                    }
+                } else {
+                    binding.btnAgregar.visibility = View.GONE
+                }
             }
 
             // Clic en la tarjeta para abrir vista de detalle

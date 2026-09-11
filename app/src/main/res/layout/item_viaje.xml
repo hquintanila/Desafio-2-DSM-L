@@ -112,6 +112,20 @@
                 tools:text="5 Días / 4 Noches" />
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Botón Eliminar Viaje (Al lado de los días/duración) -->
+        <ImageButton
+            android:id="@+id/btnEliminarItem"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Eliminar del carrito"
+            android:src="@android:drawable/ic_menu_delete"
+            app:tint="#D32F2F"
+            app:layout_constraintBottom_toBottomOf="@id/cardDuracion"
+            app:layout_constraintStart_toEndOf="@id/cardDuracion"
+            app:layout_constraintTop_toTopOf="@id/cardDuracion" />
+
         <!-- Botón Agregar al Carrito (Acento Ámbar / Dorado) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAgregar"

@@ -23,22 +23,33 @@ class CartActivity : AppCompatActivity() {
         binding.toolbarCart.setNavigationOnClickListener { finish() }
 
         setupRecyclerView()
+        actualizarTotal()
 
         binding.btnClearCart.setOnClickListener {
             CartManager.limpiarCarrito()
             adapter.updateLista(emptyList())
+            actualizarTotal()
             Toast.makeText(this, "Carrito Vaciado", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun setupRecyclerView() {
         adapter = ViajeAdapter(
+            listaViajes = CartManager.obtenerCarrito(),
             onItemClick = {},
-            onAddCartClick = {},
-            showAddButton = false
+            onAddCartClick = null,
+            showAddButton = false,
+            isCartMode = true,
+            onItemRemoved = {
+                actualizarTotal()
+            }
         )
         binding.rvCart.layoutManager = LinearLayoutManager(this)
         binding.rvCart.adapter = adapter
-        adapter.updateLista(CartManager.obtenerCarrito())
+    }
+
+    private fun actualizarTotal() {
+        val total = CartManager.obtenerTotal()
+        binding.tvTotal.text = String.format("$%.2f", total)
     }
 }
