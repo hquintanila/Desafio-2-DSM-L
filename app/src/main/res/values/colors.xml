@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Colores base / Toolbar -->
+    <color name="primary">#1A237E</color>
+    <color name="primary_dark">#0D47A1</color>
+    <color name="colorAccent">#FFC107</color>
+
+    <!-- Fondos y textos -->
+    <color name="card_background">#121212</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_gray">#B0BEC5</color>
+
+    <!-- Botones de Acción -->
+    <color name="btn_clear_cart">#C62828</color>
+    <color name="btn_remove_item">#D32F2F</color>
 </resources>

@@ -7,9 +7,10 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp"
+    app:cardBackgroundColor="#121212"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    app:strokeColor="#E0E0E0"
+    app:strokeColor="#333333"
     app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,14 +29,15 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/cancun1" />
 
-        <!-- Etiqueta de Precio flotante -->
+        <!-- Etiqueta de Precio flotante (Azul con texto Blanco) -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
-            app:cardBackgroundColor="#0288D1"
+            app:cardBackgroundColor="#1A237E"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
+            app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -51,7 +53,7 @@
                 tools:text="$499.00" />
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Título de la oferta o paquete -->
+        <!-- Título de la oferta o paquete (Blanco) -->
         <TextView
             android:id="@+id/tvTitulo"
             android:layout_width="0dp"
@@ -59,7 +61,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
-            android:textColor="#0288D1"
+            android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +69,7 @@
             app:layout_constraintTop_toBottomOf="@id/ivImagenViaje"
             tools:text="Cancún Todo Incluido" />
 
-        <!-- Ubicación / País -->
+        <!-- Ubicación / País (Gris Claro para contraste en negro) -->
         <TextView
             android:id="@+id/tvUbicacion"
             android:layout_width="0dp"
@@ -75,14 +77,14 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
-            android:textColor="#555555"
+            android:textColor="#B0BEC5"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitulo"
             tools:text="Quintana Roo, México" />
 
-        <!-- Badge de Duración del viaje (Fondo oscuro con Texto Blanco) -->
+        <!-- Badge de Duración del viaje -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardDuracion"
             android:layout_width="wrap_content"
@@ -90,7 +92,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
-            app:cardBackgroundColor="#0288D1"
+            app:cardBackgroundColor="#0D47A1"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
             app:strokeWidth="0dp"
@@ -110,7 +112,7 @@
                 tools:text="5 Días / 4 Noches" />
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Botón Agregar al Carrito -->
+        <!-- Botón Agregar al Carrito (Acento Ámbar / Dorado) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAgregar"
             android:layout_width="wrap_content"
@@ -119,10 +121,10 @@
             android:layout_marginBottom="12dp"
             android:text="Agregar"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:textSize="12sp"
             android:textStyle="bold"
-            app:backgroundTint="#E65100"
+            app:backgroundTint="#FFC107"
             app:cornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
