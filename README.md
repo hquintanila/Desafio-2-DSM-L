@@ -1,7 +1,7 @@
 # Desafío Práctico 2 - Agencia de Viajes (DSM-L)
 
 **Nombre: Harold Albeiro Quintanilla Rodríguez (QR241622)  
-**Enlace Explicación: 
+**Enlace Explicación: https://youtu.be/2hlefIIm-H0
 
 Aplicación móvil desarrollada en Android (Kotlin) para la gestión y visualización de viajes turísticos, integrada con Firebase Authentication y Cloud Firestore.
 
